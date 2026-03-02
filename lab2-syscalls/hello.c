@@ -25,6 +25,7 @@ void greeting_write_syscall()
 
 void get_str(const char str[])
 {
+    // todo:
 }
 
 int main(void)
