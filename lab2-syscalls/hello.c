@@ -10,6 +10,21 @@ static void greeting_from_lib();
 
 static void greeting_wrapped_syscall() 
 {
+    int result;
+    asm (
+	"\tmovq %rdi, %rax\n"		/* Syscall number -> rax.  */
+	"\tmovq %rsi, %rdi\n"		/* shift arg1 - arg5.  */
+	"\tmovq %rdx, %rsi\n"
+	"\tmovq %rcx, %rdx\n"
+	"\tmovq %r8, %r10\n"
+	"\tmovq %r9, %r8\n"
+	"\tmovq 8(%rsp),%r9\n"	/* arg6 is on the stack.  */
+	"\tsyscall\n"			/* Do the system call.  */
+    : "=a"(result)
+    );
+    if (-4095 <= result && result <= -1) {
+        return -1;
+    }
 }
 
 void greeting_write_syscall()
